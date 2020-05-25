@@ -1,0 +1,41 @@
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-fw7t{background-color:rgb(155, 155, 155);border-color:inherit;color:#333333;
+  font-family:"Times New Roman", Times, serif !important;;font-size:18px;text-align:left;vertical-align:top}
+.tg .tg-mgi7{background-color:#ffffff;border-color:inherit;color:#000000;font-family:"Times New Roman", Times, serif !important;;
+  font-size:18px;text-align:left;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-fw7t">Sql</th>
+    <th class="tg-fw7t">QuerySet</th>
+    <th class="tg-fw7t">Notes</th>
+    <th class="tg-fw7t">Detail Notes</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-mgi7"><span style="color:rgb(49, 102, 255)">INSERT INTO</span> Person <span style="color:rgb(49, 102, 255)">VALUES</span> ('Jack', '23');</td>
+    <td class="tg-mgi7">Person.objects.create(name='jack', age=23)</td>
+    <td class="tg-mgi7">Exception – IntegrityError ???</td>
+    <td class="tg-mgi7"></td>
+  </tr>
+  <tr>
+    <td class="tg-mgi7"></td>
+    <td class="tg-mgi7">tom = Person(name="Tom", age=23)<br>tom.save()<br></td>
+    <td class="tg-mgi7">Exception – IntegrityError ???</td>
+    <td class="tg-mgi7"></td>
+  </tr>
+  <tr>
+    <td class="tg-mgi7"><span style="color:rgb(49, 102, 255)">INSERT INTO</span> `page` (`page_token`)<br><span style="color:rgb(49, 102, 255)">VALUES</span> ('Test_Create_Multi'), <br>('Test Create MUlti')</td>
+    <td class="tg-mgi7">Page.objects.bulk_create([<br>Page(page_token='Test_Create_Multi'), <br>Page(page_token='Test Create MUlti')<br>])</td>
+    <td class="tg-mgi7">bulk_create()<br>bulk_create(objs, batch_size=None, <br>ignore_conflicts=False)<br></td>
+    <td class="tg-mgi7">This method inserts the provided list of objects into the database in an efficient manner (generally only 1 query, no matter how many objects there are):<br>The batch_size parameter controls how many objects are created in a single query. <br>The default is to create all objects in one batch, except for SQLite where the default is such that at most 999 variables per query are used.<br></td>
+  </tr>
+</tbody>
+</table>
