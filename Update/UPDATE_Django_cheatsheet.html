@@ -1,0 +1,67 @@
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-fw7t{background-color:rgb(155, 155, 155);border-color:inherit;color:#333333;
+  font-family:"Times New Roman", Times, serif !important;;font-size:18px;text-align:left;vertical-align:top}
+.tg .tg-0zqy{background-color:rgb(255, 255, 255);border-color:inherit;color:#000000;
+  font-family:"Times New Roman", Times, serif !important;;font-size:18px;text-align:left;vertical-align:top}
+.tg .tg-mgi7{background-color:#ffffff;border-color:inherit;color:#000000;font-family:"Times New Roman", Times, serif !important;;
+  font-size:18px;text-align:left;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-fw7t">Sql</th>
+    <th class="tg-fw7t">QuerySet</th>
+    <th class="tg-fw7t">Notes</th>
+    <th class="tg-fw7t">Detail Notes</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0zqy"><span style="color:rgb(49, 102, 255)">UPDATE</span> Person <span style="color:rgb(49, 102, 255)">SET</span> name = "Mike"</td>
+    <td class="tg-0zqy">Person.objects.all().update(name="Mike")</td>
+    <td class="tg-0zqy">update()</td>
+    <td class="tg-0zqy"></td>
+  </tr>
+  <tr>
+    <td class="tg-mgi7"><span style="color:rgb(49, 102, 255)">UPDATE</span> Person <span style="color:rgb(49, 102, 255)">SET</span> name = "Mike" <span style="color:rgb(49, 102, 255)">WHERE</span> id = 2;</td>
+    <td class="tg-mgi7">Person.objects.filter(id=2).update(name="Mike")<br></td>
+    <td class="tg-mgi7"></td>
+    <td class="tg-mgi7"></td>
+  </tr>
+  <tr>
+    <td class="tg-mgi7"><span style="color:rgb(49, 102, 255)">UPDATE</span> Person <span style="color:rgb(49, 102, 255)">SET</span> age = age * 1.5;</td>
+    <td class="tg-mgi7">Person.objects.update(age=F('age')*1.5)</td>
+    <td class="tg-mgi7">F()</td>
+    <td class="tg-mgi7">Иногда бывает необходимо изменить значение столбца в бд на основании уже имеющегося значения. <br>В этом случае мы можем использовать функцию F():</td>
+  </tr>
+  <tr>
+    <td class="tg-mgi7"><span style="color:rgb(49, 102, 255)">UPDATE</span> Person <span style="color:rgb(49, 102, 255)">SET</span> ... <span style="color:rgb(49, 102, 255)">WHERE</span> id = 2;</td>
+    <td class="tg-mgi7">bob = Person.objects.get(id=2)<br>bob.name = "Bob"<br>bob.save()</td>
+    <td class="tg-mgi7"></td>
+    <td class="tg-mgi7">В этом случае Django полностью обновляет объект, все его свойства, даже если мы их не изменяли.</td>
+  </tr>
+  <tr>
+    <td class="tg-mgi7"><span style="color:rgb(49, 102, 255)">UPDATE</span> Person <span style="color:rgb(49, 102, 255)">SET</span> name = "Bobic" <span style="color:rgb(49, 102, 255)">WHERE</span> id = 2;</td>
+    <td class="tg-mgi7">bob = Person.objects.get(id=2)<br>bob.name = "Bobic"<br>bob.save(update_fields=["name"])</td>
+    <td class="tg-mgi7"></td>
+    <td class="tg-mgi7">Чтобы указать, что нам надо обновить только определенные поля, следует использовать параметр update_fields:</td>
+  </tr>
+  <tr>
+    <td class="tg-mgi7"></td>
+    <td class="tg-mgi7">obj, created = Person.objects.update_or_create(<br>    first_name='John', last_name='Lennon',<br>    defaults={'first_name': 'Bob'},<br>)</td>
+    <td class="tg-mgi7">update_or_create()</td>
+    <td class="tg-mgi7">https://docs.djangoproject.com/en/3.0/ref/models/querysets/#update-or-create<br>A convenience method for updating an object with the given kwargs, creating a new one if necessary. The defaults is a dictionary of (field, value) pairs used to update the object.<br>Returns a tuple of (object, created), where object is the created or updated object and created is a boolean specifying whether a new object was created.<br></td>
+  </tr>
+  <tr>
+    <td class="tg-mgi7"><span style="color:rgb(49, 102, 255)">UPDATE</span> `page`<br><span style="color:rgb(49, 102, 255)">SET</span> `page_token` = <br><span style="color:rgb(49, 102, 255)">CASE</span> <span style="color:rgb(49, 102, 255)">WHEN</span> (`page`.`id_page` = 28) <span style="color:rgb(49, 102, 255)">THEN</span> 'New 1'<br><span style="color:rgb(49, 102, 255)">WHEN</span> (`page`.`id_page` = 29) <span style="color:rgb(49, 102, 255)">THEN</span> 'New 2'<br><span style="color:rgb(49, 102, 255)">ELSE NULL</span><br><span style="color:rgb(49, 102, 255)">END</span><br><span style="color:rgb(49, 102, 255)">WHERE</span> `page`.`id_page` IN (28, 29)</td>
+    <td class="tg-mgi7">&gt;&gt;&gt; obj = [Page.objects.create(page_token="Test 1"), <br>Page.objects.create(page_token="Test 2")]<br>&gt;&gt;&gt; obj[0].page_token ="New 1"<br>&gt;&gt;&gt; obj[1].page_token ="New 2"<br>&gt;&gt;&gt; Page.objects.bulk_update(obj, ['page_token'])<br></td>
+    <td class="tg-mgi7">bulk_update()</td>
+    <td class="tg-mgi7">https://docs.djangoproject.com/en/3.0/ref/models/querysets/#bulk-update <br>bulk_update(objs, fields, batch_size=None)<br>This method efficiently updates the given fields on the provided model instances, generally with one query:</td>
+  </tr>
+</tbody>
+</table>
